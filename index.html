@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#063e28">
+  <title>Dream Big Crèche · Graduation Keepsake</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="app-header">
+    <span class="brand-mark" aria-hidden="true">DB</span>
+    <div><p class="eyebrow">DREAM BIG CRÈCHE</p><h1>Graduation keepsake</h1></div>
+    <span class="header-note">One special moment. A lifelong memory.</span>
+  </header>
+  <main class="workspace">
+    <aside class="editor" aria-labelledby="editor-title">
+      <p class="eyebrow">PERSONALISE YOUR KEEPSAKE</p>
+      <h2 id="editor-title">Student details</h2>
+      <p class="intro">Change the student's details below. The original design stays fixed.</p>
+      <form id="student-form">
+        <label for="student-name">Student full name</label>
+        <input id="student-name" name="student-name" type="text" value="Bonolo Makola" maxlength="80" autocomplete="off" required>
+        <label for="student-dob">Date of birth</label>
+        <input id="student-dob" name="student-dob" type="date" value="2021-08-18" required>
+        <label for="student-gender">Gender</label>
+        <input id="student-gender" name="student-gender" type="text" value="Male" maxlength="30" autocomplete="off" required>
+        <label for="student-photo">Student photo</label>
+        <div class="upload-box">
+          <span class="upload-symbol" aria-hidden="true">↑</span>
+          <span>Choose a portrait</span>
+          <small>JPG, PNG, WebP · stays on your device</small>
+          <input id="student-photo" name="student-photo" type="file" accept="image/jpeg,image/png,image/webp">
+        </div>
+        <details class="photo-adjustments">
+          <summary>Adjust photo position</summary>
+          <label for="photo-x">Horizontal position</label>
+          <input id="photo-x" type="range" min="0" max="100" value="50">
+          <label for="photo-y">Vertical position</label>
+          <input id="photo-y" type="range" min="0" max="100" value="50">
+          <label for="photo-zoom">Photo zoom</label>
+          <input id="photo-zoom" type="range" min="100" max="200" value="100">
+          <small>Drag the portrait in the preview to reposition it.</small>
+        </details>
+        <button id="download" class="button primary" type="button" disabled>Download PNG</button>
+        <div class="secondary-actions">
+          <button id="preview" class="button secondary" type="button" disabled>Preview</button>
+          <button id="reset" class="button secondary" type="reset">Reset</button>
+        </div>
+      </form>
+      <p class="export-note">High-resolution PNG · 3594 × 3939 px<br>Only the keepsake is included in your download.</p>
+      <p id="status" class="status" role="status" aria-live="polite">Preparing your keepsake…</p>
+    </aside>
+    <section class="preview-panel" aria-labelledby="preview-title">
+      <div class="preview-heading"><h2 id="preview-title">Live preview</h2><span>Original portrait proportions</span></div>
+      <div id="poster-stage" class="poster-stage">
+        <article id="graduation-card" class="graduation-card" aria-label="Dream Big Crèche graduation keepsake for Bonolo Makola">
+          <img id="fixed-artwork" class="fixed-artwork" alt="Cream, green and gold Dream Big Crèche graduation design with Dream Big Crèche and Limpopo Provincial Government logos, ornate frame, leaves, side quotes and ribbon" draggable="false">
+          <svg class="clip-definitions" width="0" height="0" aria-hidden="true"><defs><clipPath id="portrait-clip" clipPathUnits="objectBoundingBox"><path d="M .061041 0 H .938959 C .949731 .029921 .96948 .045669 1 .053543 V .946457 C .96948 .954331 .949731 .973228 .938959 1 H .061041 C .050269 .973228 .03052 .954331 0 .946457 V .053543 C .03052 .045669 .050269 .029921 .061041 0 Z"/></clipPath></defs></svg>
+          <div id="portrait-window" class="portrait-window"><img id="student-portrait" alt="Bonolo Makola's graduation portrait" draggable="false"></div>
+          <div id="name-label" class="name-label">Bonolo Makola</div>
+          <div id="dob-label" class="dob-label">DOB: 18-08-2021</div>
+          <div id="gender-label" class="gender-label">Gender: Male</div>
+          <div class="sr-only">Dream Big Crèche. Limpopo Provincial Government, Republic of South Africa. Grow · Learn · Belong · Succeed. Graduation Ceremony. Small Steps · Brighter Tomorrows. A bright beginning for a brighter future. Today a little learner, tomorrow a big dreamer. Congratulations on Your Achievement. Education is Priceless.</div>
+        </article>
+      </div>
+    </section>
+  </main>
+  <dialog id="preview-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-toolbar"><h2 id="dialog-title">Your graduation keepsake</h2><button id="close-preview" class="button secondary" type="button">Close</button></div>
+    <img id="full-preview" alt="Full graduation keepsake preview">
+  </dialog>
+</body>
+</html>
