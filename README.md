@@ -1,21 +1,42 @@
-# Dream Big Crèche Graduation Keepsake & Student Calendar
+# MEMORIQ × Dream Big Crèche · Keepsakes, Calendars & Memory Books
 
-An all-in-one web generator for **Dream Big Crèche**:
-1. **Graduation Keepsake**: Matches the original **1198 × 1313** reference poster with the Dream Big Crèche logo, Limpopo Provincial Government logo, ornate framed portrait, gold laurel quotes, and ribbon banner.
-2. **Student Calendar**: A companion **1200 × 1700** (A-series wall poster ratio) 12-month annual student calendar featuring the child's framed portrait, full details, and dynamically generated monthly date grids for any chosen academic year (2026, 2027, etc.).
+An all-in-one digital studio combining **MEMORIQ** (South Africa's memory, milestone & keepsake platform) and **Dream Big Crèche** (Limpopo, South Africa), powered by **Memoriq AI ("Plus You")**.
 
-### How to use
-- Open `index.html` (or `calendar.html`) in any modern browser. No installation, server, internet connection, build steps, or external libraries are required.
-- Use the **Keepsake** and **Calendar** tabs at the top of the editor to switch between templates at any time.
-- Changes to the student's name, birth date, gender, photo upload, and photo position/zoom are instantly synchronized across both templates.
-- **Student Calendar Year**: When on the Calendar tab, select the academic year (e.g., 2026, 2027) to update all 12 month grids and headings automatically.
-- **Photo adjustments**: Drag the portrait directly inside either preview window or use the horizontal, vertical, and zoom sliders.
-- **Preview**: Opens a clean modal preview of the active template.
-- **Download PNG**:
-  - **Graduation Keepsake**: Exports a high-resolution **3594 × 3939 px** PNG (`[Name]-Dream-Big-Graduation.png`).
-  - **Student Calendar**: Exports an ultra-sharp **3600 × 5100 px** 300 DPI print-quality PNG (`[Name]-Dream-Big-Calendar-[Year].png`).
-- **Reset**: Restores Bonolo Makola, 18-08-2021, Male, 2026, and the default portrait and position.
+---
 
-### Architecture
-- Works both locally (`file://`) and hosted (e.g. Vercel at `https://students-lemon-seven.vercel.app/`).
-- Native browser Canvas rendering ensures crisp vector-grade typography, accurate date grids, and reliable downloads without external server dependencies.
+### Studio Features
+
+1. 🎓 **Graduation Keepsake**:
+   - Matches the original **1198 × 1313** Dream Big Crèche graduation reference poster.
+   - Features the Limpopo Provincial Government seal, school motto (*"GROW • LEARN • BELONG • SUCCEED"*), ornate framed portrait, gold laurel quotes, and ribbon banner.
+   - Exports a high-resolution **3594 × 3939 px** PNG (`[Name]-Dream-Big-Graduation.png`).
+
+2. 📅 **Student Calendar**:
+   - A companion **1200 × 1700** A-series wall poster annual calendar.
+   - Choose the academic year (e.g. **2026**, **2027**) to automatically generate all 12 monthly date grids.
+   - Exports an ultra-sharp **3600 × 5100 px** 300 DPI print-ready PNG (`[Name]-Dream-Big-Calendar-[Year].png`).
+
+3. 📖 **3D Flip Memory Book**:
+   - Tactile, page-turning graduation memory book inspired by MEMORIQ's flagship editorial photobooks.
+   - **Spread 0 (Cover)**: Luxury green leather & embossed gold crest cover.
+   - **Spread 1 (Pages 2–3)**: Graduate portrait and formal Certificate of Graduation.
+   - **Spread 2 (Pages 4–5)**: Crèche journey, future aspirations (*"When I Grow Up, I Want To Be A Doctor"*), and Teacher's blessing.
+   - **Spread 3 (Pages 6–7)**: Academic year calendar spreads (H1 & H2).
+   - **Spread 4 (Pages 8–9)**: Family & teacher autographs space and the **Official Memoriq Digital QR Plaque**.
+
+4. ✨ **Memoriq AI Studio ("Plus You")**:
+   - An intelligent generative assistant built directly into the studio.
+   - Generates heartfelt graduation blessings, teacher closing notes, and future career stories.
+   - Supports South African languages: **English**, **Sepedi (Northern Sotho)**, **Sesotho**, and **isiZulu**.
+   - Works 100% offline out-of-the-box with smart contextual generation, and optionally connects to **Google Gemini API** for live AI writing.
+
+5. 🏷️ **Digital Keepsake QR Plaque**:
+   - Automatically generates a scannable QR code pointing to the live digital keepsake (`https://students-lemon-seven.vercel.app/`).
+   - Parents can scan the printed keepsake plaque with any smartphone to open and flip through the digital memory book.
+
+---
+
+### Live URLs
+- **Main Studio**: [https://students-lemon-seven.vercel.app/](https://students-lemon-seven.vercel.app/)
+- **Student Calendar**: [https://students-lemon-seven.vercel.app/calendar.html](https://students-lemon-seven.vercel.app/calendar.html)
+- **3D Memory Book**: [https://students-lemon-seven.vercel.app/memory-book.html](https://students-lemon-seven.vercel.app/memory-book.html)

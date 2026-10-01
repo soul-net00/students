@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#063e28">
-  <title>MEMORIQ × Dream Big Crèche · Keepsakes, Calendars & Memory Books</title>
+  <title>MEMORIQ · 3D Graduation Memory Book & Keepsake</title>
   <link rel="stylesheet" href="style.css">
   <script src="reference-data.js"></script>
   <script src="qr-generator.js"></script>
@@ -19,24 +19,22 @@
       <span class="creche-badge">DREAM BIG CRÈCHE</span>
     </div>
     <div class="header-center">
-      <p class="eyebrow">DIGITAL KEEPSAKE & MEMORY STUDIO</p>
-      <h1>Student Keepsakes, Calendars & Memory Books</h1>
+      <p class="eyebrow">DIGITAL MEMORY BOOK STUDIO</p>
+      <h1>Interactive 3D Graduation Memory Book</h1>
     </div>
     <span class="header-note">One special moment. A lifelong memory.</span>
   </header>
 
   <main class="workspace">
-    <!-- Editor Controls Sidebar -->
     <aside class="editor" aria-labelledby="editor-title">
-      <!-- 4-Mode Studio Selector -->
-      <div class="template-selector" role="tablist" aria-label="Template and studio selection">
-        <button type="button" id="tab-graduation" class="template-tab active" role="tab" aria-selected="true">
+      <div class="template-selector" role="tablist">
+        <button type="button" id="tab-graduation" class="template-tab" role="tab" aria-selected="false">
           <span class="tab-icon">🎓</span> Keepsake
         </button>
         <button type="button" id="tab-calendar" class="template-tab" role="tab" aria-selected="false">
           <span class="tab-icon">📅</span> Calendar
         </button>
-        <button type="button" id="tab-book" class="template-tab" role="tab" aria-selected="false">
+        <button type="button" id="tab-book" class="template-tab active" role="tab" aria-selected="true">
           <span class="tab-icon">📖</span> Book
         </button>
         <button type="button" id="tab-ai" class="template-tab" role="tab" aria-selected="false">
@@ -44,12 +42,11 @@
         </button>
       </div>
 
-      <p class="eyebrow">STUDENT DETAILS</p>
+      <p class="eyebrow">MEMORY BOOK DETAILS</p>
       <h2 id="editor-title">Personalize</h2>
-      <p class="intro">Update student details below. Changes reflect across all templates and memory books.</p>
+      <p class="intro">Edit memories, dreams, and teacher notes for the multi-page memory book.</p>
 
       <form id="student-form">
-        <!-- Calendar Year Group (visible when calendar is active) -->
         <div id="calendar-year-group" style="display: none;">
           <label for="calendar-year">Academic calendar year</label>
           <select id="calendar-year" name="calendar-year">
@@ -61,18 +58,17 @@
         </div>
 
         <label for="student-name">Student full name</label>
-        <input id="student-name" name="student-name" type="text" value="Bonolo Makola" maxlength="80" autocomplete="off" required>
+        <input id="student-name" name="student-name" type="text" value="Bonolo Makola" maxlength="80" required>
 
         <label for="student-dob">Date of birth</label>
         <input id="student-dob" name="student-dob" type="date" value="2021-08-18" required>
 
         <label for="student-gender">Gender</label>
-        <input id="student-gender" name="student-gender" type="text" value="Male" maxlength="30" autocomplete="off" required>
+        <input id="student-gender" name="student-gender" type="text" value="Male" maxlength="30" required>
 
-        <!-- Memory Book Specific Details -->
-        <div id="memory-book-fields" style="display: none;">
+        <div id="memory-book-fields">
           <label for="student-dream">Future dream / Aspiration</label>
-          <input id="student-dream" name="student-dream" type="text" value="Doctor" maxlength="50" placeholder="e.g. Doctor, Pilot, Scientist, Teacher">
+          <input id="student-dream" name="student-dream" type="text" value="Doctor" maxlength="50">
 
           <label for="teacher-name">Class teacher</label>
           <input id="teacher-name" name="teacher-name" type="text" value="Teacher Thandi" maxlength="60">
@@ -84,7 +80,6 @@
           <textarea id="custom-blessing" name="custom-blessing" rows="3">A bright beginning for a brighter future! May your journey ahead be filled with curiosity, courage, and endless joy.</textarea>
         </div>
 
-        <!-- Student Photo -->
         <label for="student-photo">Student portrait</label>
         <div class="upload-box">
           <span class="upload-symbol" aria-hidden="true">↑</span>
@@ -101,129 +96,67 @@
           <input id="photo-y" type="range" min="0" max="100" value="50">
           <label for="photo-zoom">Photo zoom</label>
           <input id="photo-zoom" type="range" min="100" max="200" value="100">
-          <small>Drag the portrait in any preview to reposition it.</small>
         </details>
 
-        <button id="download" class="button primary" type="button" disabled>Download Keepsake PNG</button>
+        <button id="download" class="button primary" type="button" disabled>Print / Save Memory Book</button>
         <div class="secondary-actions">
           <button id="preview" class="button secondary" type="button" disabled>Preview</button>
           <button id="reset" class="button secondary" type="reset">Reset</button>
         </div>
       </form>
 
-      <p class="export-note" id="export-note-text">High-resolution PNG · 3594 × 3939 px<br>Only the keepsake is included in your download.</p>
-      <p id="status" class="status" role="status" aria-live="polite">Preparing your keepsake…</p>
+      <p class="export-note" id="export-note-text">Interactive multi-page keepsake with scannable digital QR plaque.</p>
+      <p id="status" class="status" role="status" aria-live="polite">Preparing your book…</p>
     </aside>
 
-    <!-- Preview Stage / Studio Canvas -->
     <section class="preview-panel" aria-labelledby="preview-title">
       <div class="preview-heading">
-        <h2 id="preview-title">Live preview · Graduation Keepsake</h2>
-        <span id="preview-sub">Original portrait proportions (1198 × 1313)</span>
+        <h2 id="preview-title">Live preview · 3D Memory Book</h2>
+        <span id="preview-sub">Tactile page-turning digital album by MEMORIQ</span>
       </div>
 
-      <!-- Poster Stage (Keepsake & Calendar) -->
-      <div id="poster-stage" class="poster-stage">
-        <!-- 1. Graduation Card -->
-        <article id="graduation-card" class="graduation-card" aria-label="Dream Big Crèche graduation keepsake for Bonolo Makola">
-          <img id="fixed-artwork" class="fixed-artwork" alt="Dream Big Crèche graduation design" draggable="false">
-          <svg class="clip-definitions" width="0" height="0" aria-hidden="true">
-            <defs>
-              <clipPath id="portrait-clip" clipPathUnits="objectBoundingBox">
-                <path d="M .061041 0 H .938959 C .949731 .029921 .96948 .045669 1 .053543 V .946457 C .96948 .954331 .949731 .973228 .938959 1 H .061041 C .050269 .973228 .03052 .954331 0 .946457 V .053543 C .03052 .045669 .050269 .029921 .061041 0 Z"/>
-              </clipPath>
-            </defs>
-          </svg>
-          <div id="portrait-window" class="portrait-window">
-            <img id="student-portrait" alt="Bonolo Makola's graduation portrait" draggable="false">
-          </div>
+      <!-- Poster Stage (Hidden by default in book mode) -->
+      <div id="poster-stage" class="poster-stage mode-hidden">
+        <article id="graduation-card" class="graduation-card" hidden>
+          <img id="fixed-artwork" class="fixed-artwork" draggable="false">
+          <svg class="clip-definitions" width="0" height="0"><defs><clipPath id="portrait-clip" clipPathUnits="objectBoundingBox"><path d="M .061041 0 H .938959 C .949731 .029921 .96948 .045669 1 .053543 V .946457 C .96948 .954331 .949731 .973228 .938959 1 H .061041 C .050269 .973228 .03052 .954331 0 .946457 V .053543 C .03052 .045669 .050269 .029921 .061041 0 Z"/></clipPath></defs></svg>
+          <div id="portrait-window" class="portrait-window"><img id="student-portrait" draggable="false"></div>
           <div id="name-label" class="name-label">Bonolo Makola</div>
           <div id="dob-label" class="dob-label">DOB: 18-08-2021</div>
           <div id="gender-label" class="gender-label">Gender: Male</div>
         </article>
 
-        <!-- 2. Student Calendar Card -->
-        <article id="calendar-card" class="calendar-card" aria-label="Dream Big Crèche 2026 Student Calendar for Bonolo Makola" hidden>
+        <article id="calendar-card" class="calendar-card" hidden>
           <div class="cal-border-outer"></div>
           <div class="cal-border-gold"></div>
           <div class="cal-border-inner"></div>
-          <div class="cal-corner cal-corner-tl"></div>
-          <div class="cal-corner cal-corner-tr"></div>
-          <div class="cal-corner cal-corner-bl"></div>
-          <div class="cal-corner cal-corner-br"></div>
-
           <header class="cal-header">
-            <div class="cal-logo-left">
-              <img src="assets/logo-reference.png" alt="Dream Big Crèche Crest" class="cal-crest-img">
-            </div>
+            <div class="cal-logo-left"><img src="assets/logo-reference.png" class="cal-crest-img"></div>
             <div class="cal-header-center">
               <div class="cal-eyebrow">DREAM BIG CRÈCHE</div>
-              <div class="cal-motto">GROW • LEARN • BELONG • SUCCEED</div>
-              <div class="cal-cap-wrap">
-                <svg class="cal-grad-cap" viewBox="0 0 100 50">
-                  <polygon points="50,5 95,25 50,45 5,25" fill="#bd913e"/>
-                  <polygon points="25,28 75,28 70,42 30,42" fill="#bd913e"/>
-                  <line x1="50" y1="25" x2="88" y2="35" stroke="#e5c365" stroke-width="3"/>
-                  <circle cx="88" cy="37" r="3.5" fill="#e5c365"/>
-                </svg>
-              </div>
               <h1 class="cal-title"><span id="cal-title-year">2026</span> CALENDAR</h1>
-              <div class="cal-slogan">SMALL STEPS • BRIGHTER TOMORROWS</div>
-              <div class="cal-gold-rule"><span>✦</span></div>
             </div>
-            <div class="cal-logo-right">
-              <img src="assets/limpopo-logo.png" alt="Limpopo Provincial Government" class="cal-limpopo-img">
-            </div>
+            <div class="cal-logo-right"><img src="assets/limpopo-logo.png" class="cal-limpopo-img"></div>
           </header>
-
           <section class="cal-student-section">
-            <div class="cal-side-quote cal-quote-left">
-              <p>A<br>BRIGHT<br>BEGINNING<br>FOR A<br>BRIGHTER<br>FUTURE</p>
-            </div>
-
             <div id="cal-portrait-frame" class="cal-portrait-frame">
-              <div id="cal-portrait-window" class="cal-portrait-window">
-                <img id="cal-student-portrait" alt="Student Calendar Portrait" draggable="false">
-              </div>
-            </div>
-
-            <div class="cal-side-quote cal-quote-right">
-              <p>TODAY<br>A LITTLE<br>LEARNER,<br>TOMORROW<br>A BIG<br>DREAMER</p>
+              <div id="cal-portrait-window" class="cal-portrait-window"><img id="cal-student-portrait" draggable="false"></div>
             </div>
           </section>
-
           <div class="cal-identity-section">
-            <div class="cal-ribbon">
-              <div id="cal-name-label" class="cal-name-label">Bonolo Makola</div>
-            </div>
+            <div class="cal-ribbon"><div id="cal-name-label" class="cal-name-label">Bonolo Makola</div></div>
             <div class="cal-meta-row">
               <div id="cal-dob-label" class="cal-dob-label">📅  DOB: 18-08-2021</div>
               <span class="cal-meta-sep">|</span>
               <div id="cal-gender-label" class="cal-gender-label">👤  Gender: Male</div>
             </div>
           </div>
-
-          <div class="cal-section-divider">
-            <span class="cal-div-line"></span>
-            <span class="cal-div-badge" id="cal-academic-badge">✦  2026 ACADEMIC YEAR  ✦</span>
-            <span class="cal-div-line"></span>
-          </div>
-
-          <div id="cal-months-grid" class="cal-months-grid">
-            <!-- 12 Month Cards dynamically populated -->
-          </div>
-
-          <footer class="cal-footer">
-            <div class="cal-footer-congrats">Congratulations on Your Achievement</div>
-            <div class="cal-footer-rule"></div>
-            <div class="cal-footer-slogan">EDUCATION IS PRICELESS</div>
-            <div class="cal-footer-sub">REPUBLIC OF SOUTH AFRICA</div>
-          </footer>
+          <div id="cal-months-grid" class="cal-months-grid"></div>
         </article>
       </div>
 
-      <!-- 3. MEMORIQ 3D Flip Memory Book Stage -->
-      <div id="book-stage" class="book-stage">
+      <!-- 3D Flip Memory Book Stage -->
+      <div id="book-stage" class="book-stage active">
         <div class="book-nav">
           <button id="book-prev" class="button secondary" type="button">◀ Previous Page</button>
           <span id="book-counter" class="book-counter">Cover (Page 1 of 5)</span>
@@ -231,11 +164,10 @@
         </div>
 
         <div class="book-viewport">
-          <!-- Spread 0: Leather Cover -->
           <div id="spread-0" class="book-spread">
             <div class="book-cover">
               <div class="book-cover-frame">
-                <img src="assets/logo-reference.png" alt="Crest" style="width: 80px; height: auto; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));">
+                <img src="assets/logo-reference.png" alt="Crest" style="width: 80px; height: auto;">
                 <div class="book-cover-title">GRADUATION MEMORY BOOK</div>
                 <div class="book-cover-sub">DREAM BIG CRÈCHE • CLASS OF 2026</div>
                 <div class="cal-gold-rule" style="width: 240px; margin: 10px 0;"><span>★</span></div>
@@ -246,29 +178,18 @@
             </div>
           </div>
 
-          <!-- Spread 1: Certificate & Portrait -->
           <div id="spread-1" class="book-spread" style="display: none;">
             <div class="book-page book-page-left">
-              <div class="page-header-row">
-                <h3 class="page-title">Graduate Portrait</h3>
-                <span class="page-num">Page 2</span>
-              </div>
+              <div class="page-header-row"><h3 class="page-title">Graduate Portrait</h3><span class="page-num">Page 2</span></div>
               <div class="page-body" style="align-items: center; justify-content: center;">
-                <div class="book-portrait-box">
-                  <img id="book-portrait-img" alt="Student Portrait">
-                </div>
+                <div class="book-portrait-box"><img id="book-portrait-img" alt="Student Portrait"></div>
                 <h4 id="book-p1-name" style="margin: 10px 0 4px; font: bold 20px var(--serif); color: var(--green);">Bonolo Makola</h4>
                 <p id="book-p1-meta" style="margin: 0; font-size: 13px; color: #5f7064;">DOB: 18-08-2021 · Male</p>
-                <div class="book-quote-banner">
-                  "Today a little learner, tomorrow a big dreamer. Small steps lead to brighter tomorrows."
-                </div>
+                <div class="book-quote-banner">"Today a little learner, tomorrow a big dreamer. Small steps lead to brighter tomorrows."</div>
               </div>
             </div>
             <div class="book-page book-page-right">
-              <div class="page-header-row">
-                <h3 class="page-title">Certificate of Graduation</h3>
-                <span class="page-num">Page 3</span>
-              </div>
+              <div class="page-header-row"><h3 class="page-title">Certificate of Graduation</h3><span class="page-num">Page 3</span></div>
               <div class="page-body" style="text-align: center; justify-content: center; padding: 10px;">
                 <img src="assets/limpopo-logo.png" alt="Government Logo" style="max-height: 48px; margin: 0 auto 12px; object-fit: contain;">
                 <p style="font: italic 13px Georgia, serif; color: #567261; margin: 0 0 6px;">This certifies that</p>
@@ -288,13 +209,9 @@
             </div>
           </div>
 
-          <!-- Spread 2: Memories & Dreams -->
           <div id="spread-2" class="book-spread" style="display: none;">
             <div class="book-page book-page-left">
-              <div class="page-header-row">
-                <h3 class="page-title">My Crèche Journey</h3>
-                <span class="page-num">Page 4</span>
-              </div>
+              <div class="page-header-row"><h3 class="page-title">My Crèche Journey</h3><span class="page-num">Page 4</span></div>
               <div class="page-body">
                 <div style="background: #f4f7ee; border-radius: 6px; padding: 14px; margin-bottom: 12px;">
                   <h4 style="margin: 0 0 6px; color: var(--green); font-size: 14px;">🚀 When I Grow Up, I Want To Be A:</h4>
@@ -310,10 +227,7 @@
               </div>
             </div>
             <div class="book-page book-page-right">
-              <div class="page-header-row">
-                <h3 class="page-title">Teacher's Blessing</h3>
-                <span class="page-num">Page 5</span>
-              </div>
+              <div class="page-header-row"><h3 class="page-title">Teacher's Blessing</h3><span class="page-num">Page 5</span></div>
               <div class="page-body" style="justify-content: space-between;">
                 <p id="book-teacher-blessing-text" style="font: italic 14px/1.8 Georgia, serif; color: var(--ink); margin: 10px 0;">
                   "Dear Bonolo, having you in our classroom was a true blessing. Your bright smile, curiosity, and kindness brought joy to all of us. As you step forward, remember that you are capable of amazing things! — Teacher Thandi"
@@ -326,35 +240,20 @@
             </div>
           </div>
 
-          <!-- Spread 3: Calendar Spread -->
           <div id="spread-3" class="book-spread" style="display: none;">
             <div class="book-page book-page-left">
-              <div class="page-header-row">
-                <h3 class="page-title">2026 School Calendar · H1</h3>
-                <span class="page-num">Page 6</span>
-              </div>
-              <div class="page-body" id="book-cal-h1">
-                <!-- Months 1 to 6 mini cards -->
-              </div>
+              <div class="page-header-row"><h3 class="page-title">2026 School Calendar · H1</h3><span class="page-num">Page 6</span></div>
+              <div class="page-body" id="book-cal-h1"></div>
             </div>
             <div class="book-page book-page-right">
-              <div class="page-header-row">
-                <h3 class="page-title">2026 School Calendar · H2</h3>
-                <span class="page-num">Page 7</span>
-              </div>
-              <div class="page-body" id="book-cal-h2">
-                <!-- Months 7 to 12 mini cards -->
-              </div>
+              <div class="page-header-row"><h3 class="page-title">2026 School Calendar · H2</h3><span class="page-num">Page 7</span></div>
+              <div class="page-body" id="book-cal-h2"></div>
             </div>
           </div>
 
-          <!-- Spread 4: Autographs & Digital Plaque -->
           <div id="spread-4" class="book-spread" style="display: none;">
             <div class="book-page book-page-left">
-              <div class="page-header-row">
-                <h3 class="page-title">Autographs & Wishes</h3>
-                <span class="page-num">Page 8</span>
-              </div>
+              <div class="page-header-row"><h3 class="page-title">Autographs & Wishes</h3><span class="page-num">Page 8</span></div>
               <div class="page-body" style="border: 2px dashed #d5decb; border-radius: 6px; padding: 14px; background: #fafaf5;">
                 <p style="margin: 0 0 10px; font: italic 12px Georgia, serif; color: #768578; text-align: center;">Space for teachers, classmates & family to write warm wishes:</p>
                 <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 18px;">
@@ -366,17 +265,12 @@
               </div>
             </div>
             <div class="book-page book-page-right">
-              <div class="page-header-row">
-                <h3 class="page-title">Digital Memory Plaque</h3>
-                <span class="page-num">Back Cover</span>
-              </div>
+              <div class="page-header-row"><h3 class="page-title">Digital Memory Plaque</h3><span class="page-num">Back Cover</span></div>
               <div class="page-body" style="align-items: center; justify-content: center; text-align: center;">
                 <div class="digital-plaque-card">
                   <span class="ai-badge">★ MEMORIQ DIGITAL PLAQUE ★</span>
                   <p style="font-size: 12px; color: #4e6656; margin: 8px 0 4px;">Scan with any phone camera to view this keepsake online:</p>
-                  <div id="plaque-qr-container" class="plaque-qr-box">
-                    <!-- Dynamic SVG QR Code generated here -->
-                  </div>
+                  <div id="plaque-qr-container" class="plaque-qr-box"></div>
                   <p id="plaque-url-text" style="font: bold 11px Arial, sans-serif; color: var(--green); margin: 0;">students-lemon-seven.vercel.app</p>
                 </div>
               </div>
@@ -385,31 +279,22 @@
         </div>
       </div>
 
-      <!-- 4. MEMORIQ AI Studio Panel ("Plus You") -->
+      <!-- AI Studio Stage -->
       <div id="ai-stage" class="ai-studio-panel">
         <div class="ai-header-row">
           <div>
             <span class="ai-badge">✨ MEMORIQ AI CO-PILOT</span>
             <h3 style="margin: 6px 0 0; font: bold 22px Georgia, serif; color: var(--green);">AI Keepsake & Storytelling Assistant</h3>
           </div>
-          <button id="toggle-gemini-settings" class="button secondary" type="button" style="font-size: 11px; padding: 6px 12px;">⚙️ Gemini API Key</button>
+          <button id="toggle-gemini-settings" class="button secondary" type="button">⚙️ Gemini API Key</button>
         </div>
-
-        <p style="color: #5d7063; font-size: 13px; line-height: 1.6; margin: 0 0 16px;">
-          Generate heartfelt, personalized graduation blessings, teacher remarks, future career stories, and translations in South African official languages.
-        </p>
-
-        <!-- Gemini API Key configuration box (collapsible) -->
         <div id="gemini-key-box" style="display: none; background: #f3f6ee; border: 1px solid #c8d8c2; border-radius: 6px; padding: 14px; margin-bottom: 16px;">
-          <label for="gemini-api-key" style="margin-top: 0;">Google Gemini API Key (Optional for live Gemini Flash model):</label>
+          <label for="gemini-api-key" style="margin-top: 0;">Google Gemini API Key (Optional):</label>
           <div style="display: flex; gap: 8px;">
             <input id="gemini-api-key" type="password" placeholder="AIzaSy..." style="flex: 1;">
             <button id="save-gemini-key" class="button primary" type="button" style="width: auto;">Save</button>
           </div>
-          <small style="color: #6a7d6f; display: block; margin-top: 6px;">Your key stays in your local browser only. Leave blank to use our built-in offline smart generator.</small>
         </div>
-
-        <!-- AI Generator Form -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
           <div>
             <label for="ai-gen-type">What would you like to generate?</label>
@@ -429,7 +314,6 @@
             </select>
           </div>
         </div>
-
         <div style="margin-top: 14px;">
           <label style="margin-top: 0;">Quick Generation Prompts:</label>
           <div class="ai-quick-buttons">
@@ -440,17 +324,11 @@
             <button type="button" class="ai-chip-btn" data-type="graduation_wish" data-lang="zul">🇿🇦 isiZulu Celebration Wish</button>
           </div>
         </div>
-
         <div>
           <label for="ai-custom-prompt">Custom instructions or student story (Optional):</label>
           <input id="ai-custom-prompt" type="text" placeholder="e.g. Write an encouraging message mentioning how much Bonolo loves drawing and helping friends">
         </div>
-
-        <button id="btn-generate-ai" class="button primary" type="button" style="margin-top: 14px;">
-          ✨ Generate with Memoriq AI
-        </button>
-
-        <!-- AI Output Box -->
+        <button id="btn-generate-ai" class="button primary" type="button" style="margin-top: 14px;">✨ Generate with Memoriq AI</button>
         <div id="ai-output-container" style="display: none;">
           <label style="margin-bottom: 4px;">Generated Message:</label>
           <div id="ai-output-text" class="ai-output-box"></div>
@@ -464,10 +342,7 @@
   </main>
 
   <dialog id="preview-dialog" aria-labelledby="dialog-title">
-    <div class="dialog-toolbar">
-      <h2 id="dialog-title">Keepsake Preview</h2>
-      <button id="close-preview" class="button secondary" type="button">Close</button>
-    </div>
+    <div class="dialog-toolbar"><h2 id="dialog-title">Preview</h2><button id="close-preview" class="button secondary">Close</button></div>
     <img id="full-preview" alt="Full preview">
   </dialog>
 </body>

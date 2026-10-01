@@ -9,7 +9,11 @@
     name: 'Bonolo Makola',
     dob: '2021-08-18',
     gender: 'Male',
-    year: '2026'
+    year: '2026',
+    dream: 'Doctor',
+    teacher: 'Teacher Thandi',
+    memory: 'Storytime, Building Blocks & Sports Day',
+    blessing: 'A bright beginning for a brighter future! May your journey ahead be filled with curiosity, courage, and endless joy.'
   });
 
   const photoBox = Object.freeze({ x: 319, y: 394, w: 557, h: 635 });
@@ -25,16 +29,28 @@
 
   const form = $('student-form');
   const stage = $('poster-stage');
+  const bookStage = $('book-stage');
+  const aiStage = $('ai-stage');
   const gradCard = $('graduation-card');
   const calCard = $('calendar-card');
-  const tabGrad = $('tab-graduation');
-  const tabCal = $('tab-calendar');
+
+  // Tabs
+  const tabs = {
+    graduation: $('tab-graduation'),
+    calendar: $('tab-calendar'),
+    book: $('tab-book'),
+    ai: $('tab-ai')
+  };
 
   const fields = {
     name: $('student-name'),
     dob: $('student-dob'),
     gender: $('student-gender'),
-    year: $('calendar-year')
+    year: $('calendar-year'),
+    dream: $('student-dream'),
+    teacher: $('teacher-name'),
+    memory: $('favorite-memory'),
+    blessing: $('custom-blessing')
   };
 
   const gradLabels = {
@@ -63,10 +79,13 @@
 
   const measureContext = document.createElement('canvas').getContext('2d');
 
-  let currentMode = 'graduation'; // 'graduation' | 'calendar'
+  let currentMode = 'graduation'; // 'graduation' | 'calendar' | 'book' | 'ai'
+  let currentSpread = 0;
+  const TOTAL_SPREADS = 5;
+
   let sourceImage, artworkImage, originalPortrait, portraitImage, ready = false;
   let crecheLogoImg, limpopoLogoImg;
-  let leftQuoteImg, rightQuoteImg, capImg;
+  let leftQuoteImg, rightQuoteImg;
   let uploadRevision = 0, dragStart = null;
   const defaultTextCrops = {};
 
@@ -100,7 +119,6 @@
   }
 
   function portraitPath(w = 557, h = 635) {
-    // Relative concave corner cut-outs matching the frame
     const path = new Path2D();
     const cornerW = Math.round(w * 0.061);
     const cornerH = Math.round(h * 0.0535);
@@ -174,14 +192,14 @@
 
   function currentText() {
     return {
-      name: fields.name.value.trim() || 'Student',
-      dob: `DOB: ${displayDob(fields.dob.value)}`,
-      gender: `Gender: ${fields.gender.value.trim() || 'Male'}`
+      name: (fields.name ? fields.name.value.trim() : '') || 'Student',
+      dob: `DOB: ${displayDob(fields.dob ? fields.dob.value : '')}`,
+      gender: `Gender: ${(fields.gender ? fields.gender.value.trim() : '') || 'Male'}`
     };
   }
 
   function isDefault(key) {
-    return fields[key].value === defaults[key];
+    return fields[key] && fields[key].value === defaults[key];
   }
 
   function fontFor(key, text) {
@@ -205,7 +223,7 @@
   function updateText() {
     const text = currentText();
 
-    // Update Graduation Card labels
+    // 1. Graduation Card
     for (const key of Object.keys(gradLabels)) {
       const label = gradLabels[key];
       if (!label) continue;
@@ -216,7 +234,7 @@
       label.style.textShadow = key === 'name' && !isDefault(key) ? '1px 2px 2px #002918' : 'none';
     }
 
-    // Update Calendar Card labels
+    // 2. Calendar Card
     if (calLabels.name) {
       calLabels.name.textContent = text.name;
       const calFont = calFontForName(text.name);
@@ -224,6 +242,26 @@
     }
     if (calLabels.dob) calLabels.dob.textContent = `📅  ${text.dob}`;
     if (calLabels.gender) calLabels.gender.textContent = `👤  ${text.gender}`;
+
+    // 3. Memory Book
+    if ($('book-cover-name')) $('book-cover-name').textContent = text.name;
+    if ($('book-p1-name')) $('book-p1-name').textContent = text.name;
+    if ($('book-p1-meta')) $('book-p1-meta').textContent = `${text.dob} · ${text.gender.replace('Gender: ', '')}`;
+    if ($('book-cert-name')) $('book-cert-name').textContent = text.name;
+
+    const teacher = fields.teacher ? fields.teacher.value.trim() : defaults.teacher;
+    if ($('book-teacher-sign')) $('book-teacher-sign').textContent = teacher;
+
+    const dream = fields.dream ? fields.dream.value.trim() : defaults.dream;
+    if ($('book-dream-display')) $('book-dream-display').textContent = dream;
+
+    const mem = fields.memory ? fields.memory.value.trim() : defaults.memory;
+    if ($('book-memory-display')) $('book-memory-display').textContent = mem;
+
+    const blessing = fields.blessing ? fields.blessing.value.trim() : defaults.blessing;
+    if ($('book-teacher-blessing-text')) {
+      $('book-teacher-blessing-text').textContent = `"${blessing} — ${teacher}"`;
+    }
 
     const studentName = fields.name.value.trim() || 'student';
     gradCard.setAttribute('aria-label', `Dream Big Crèche graduation keepsake for ${studentName}`);
@@ -237,7 +275,7 @@
     const y = `${photoControls.y.value}%`;
     const zoom = Number(photoControls.zoom.value) / 100;
 
-    const portraits = [$('student-portrait'), $('cal-student-portrait')];
+    const portraits = [$('student-portrait'), $('cal-student-portrait'), $('book-portrait-img')];
     for (const img of portraits) {
       if (!img) continue;
       img.style.setProperty('--photo-x', x);
@@ -287,15 +325,12 @@
       const firstDay = new Date(y, m, 1).getDay();
       const daysInMonth = new Date(y, m + 1, 0).getDate();
 
-      // Leading blanks
       for (let b = 0; b < firstDay; b++) {
         const empty = document.createElement('span');
         empty.className = 'cal-date-cell empty';
-        empty.textContent = '';
         datesGrid.appendChild(empty);
       }
 
-      // Month days
       for (let d = 1; d <= daysInMonth; d++) {
         const isSun = ((firstDay + d - 1) % 7) === 0;
         const cell = document.createElement('span');
@@ -307,42 +342,118 @@
       card.appendChild(datesGrid);
       grid.appendChild(card);
     }
+
+    // Also populate Memory Book calendar spreads
+    populateBookCalendar(y);
+  }
+
+  function populateBookCalendar(y) {
+    const h1 = $('book-cal-h1');
+    const h2 = $('book-cal-h2');
+    if (!h1 || !h2) return;
+    h1.innerHTML = '';
+    h2.innerHTML = '';
+
+    function buildMiniMonth(m) {
+      const box = document.createElement('div');
+      box.style.cssText = 'background: white; border: 1px solid #dcd3c1; border-radius: 4px; padding: 6px; margin-bottom: 8px; font-size: 10px;';
+      box.innerHTML = `<strong style="display:block; text-align:center; color:#063e28; margin-bottom:3px; border-bottom:1px solid #ebd9a8; padding-bottom:2px;">${MONTH_NAMES[m]}</strong>
+      <div style="display:grid; grid-template-columns:repeat(7,1fr); text-align:center; font-weight:bold; color:#718075; font-size:9px;">
+        <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+      </div>`;
+      return box;
+    }
+
+    for (let m = 0; m < 6; m++) h1.appendChild(buildMiniMonth(m));
+    for (let m = 6; m < 12; m++) h2.appendChild(buildMiniMonth(m));
   }
 
   function fitStage() {
     if (currentMode === 'calendar') {
       calCard.style.setProperty('--calendar-scale', stage.clientWidth / CAL_WIDTH);
-    } else {
+    } else if (currentMode === 'graduation') {
       gradCard.style.setProperty('--poster-scale', stage.clientWidth / GRAD_WIDTH);
     }
   }
 
   function setMode(mode) {
     currentMode = mode;
+
+    for (const key of Object.keys(tabs)) {
+      if (!tabs[key]) continue;
+      const isActive = key === mode;
+      tabs[key].classList.toggle('active', isActive);
+      tabs[key].setAttribute('aria-selected', isActive);
+    }
+
+    // Visibility toggles
+    const isGrad = mode === 'graduation';
     const isCal = mode === 'calendar';
+    const isBook = mode === 'book';
+    const isAI = mode === 'ai';
 
-    tabGrad.classList.toggle('active', !isCal);
-    tabGrad.setAttribute('aria-selected', !isCal);
-    tabCal.classList.toggle('active', isCal);
-    tabCal.setAttribute('aria-selected', isCal);
+    stage.classList.toggle('mode-hidden', isBook || isAI);
+    bookStage.classList.toggle('active', isBook);
+    aiStage.classList.toggle('active', isAI);
 
-    gradCard.hidden = isCal;
+    gradCard.hidden = !isGrad;
     calCard.hidden = !isCal;
     stage.classList.toggle('mode-calendar', isCal);
 
-    const yearGroup = $('calendar-year-group');
-    if (yearGroup) yearGroup.style.display = isCal ? 'block' : 'none';
+    $('calendar-year-group').style.display = isCal ? 'block' : 'none';
+    $('memory-book-fields').style.display = (isBook || isAI) ? 'block' : 'none';
 
-    $('preview-title').textContent = isCal ? 'Live preview · Student Calendar' : 'Live preview · Graduation Keepsake';
-    $('preview-sub').textContent = isCal ? '1200 × 1700 (A-series Wall Poster)' : 'Original portrait proportions (1198 × 1313)';
-    $('download').textContent = isCal ? 'Download Calendar PNG' : 'Download Keepsake PNG';
-    $('export-note-text').innerHTML = isCal ?
-      'High-resolution PNG · 3600 × 5100 px (300 DPI Print Quality)<br>Only the calendar is included in your download.' :
-      'High-resolution PNG · 3594 × 3939 px<br>Only the keepsake is included in your download.';
+    // Titles & Note text
+    if (isGrad) {
+      $('preview-title').textContent = 'Live preview · Graduation Keepsake';
+      $('preview-sub').textContent = 'Original portrait proportions (1198 × 1313)';
+      $('download').textContent = 'Download Keepsake PNG';
+      $('export-note-text').innerHTML = 'High-resolution PNG · 3594 × 3939 px<br>Only the keepsake is included in your download.';
+    } else if (isCal) {
+      $('preview-title').textContent = 'Live preview · Student Calendar';
+      $('preview-sub').textContent = '1200 × 1700 (A-series Wall Poster)';
+      $('download').textContent = 'Download Calendar PNG';
+      $('export-note-text').innerHTML = 'High-resolution PNG · 3600 × 5100 px (300 DPI Print Quality)<br>Only the calendar is included in your download.';
+    } else if (isBook) {
+      $('preview-title').textContent = 'Live preview · 3D Memory Book';
+      $('preview-sub').textContent = 'Tactile page-turning digital album by MEMORIQ';
+      $('download').textContent = 'Print / Save Memory Book';
+      $('export-note-text').innerHTML = 'Interactive multi-page keepsake with scannable digital QR plaque.';
+    } else if (isAI) {
+      $('preview-title').textContent = 'Memoriq AI Studio ("Plus You")';
+      $('preview-sub').textContent = 'AI Generation Co-Pilot';
+      $('download').textContent = 'Download Keepsake PNG';
+    }
 
     requestAnimationFrame(fitStage);
   }
 
+  // 3D Flipbook navigation
+  function showSpread(index) {
+    currentSpread = Math.max(0, Math.min(TOTAL_SPREADS - 1, index));
+    for (let s = 0; s < TOTAL_SPREADS; s++) {
+      const el = $(`spread-${s}`);
+      if (el) el.style.display = s === currentSpread ? (s === 0 ? 'flex' : 'grid') : 'none';
+    }
+
+    const counter = $('book-counter');
+    const titles = [
+      'Cover',
+      'Pages 2–3: Certificate',
+      'Pages 4–5: Memories & Dreams',
+      'Pages 6–7: Calendar',
+      'Pages 8–9: Digital Plaque'
+    ];
+    if (counter) counter.textContent = `${titles[currentSpread]} (${currentSpread + 1} of ${TOTAL_SPREADS})`;
+
+    $('book-prev').disabled = currentSpread === 0;
+    $('book-next').disabled = currentSpread === TOTAL_SPREADS - 1;
+  }
+
+  if ($('book-prev')) $('book-prev').addEventListener('click', () => showSpread(currentSpread - 1));
+  if ($('book-next')) $('book-next').addEventListener('click', () => showSpread(currentSpread + 1));
+
+  // Canvas drawing functions
   function drawPortrait(ctx) {
     const { x, y, w, h } = photoBox;
     const zoom = Number(photoControls.zoom.value) / 100;
@@ -360,7 +471,6 @@
     const zoom = Number(photoControls.zoom.value) / 100;
     const px = Number(photoControls.x.value) / 100, py = Number(photoControls.y.value) / 100;
 
-    // Ornate gold frame background
     ctx.save();
     ctx.translate(x - 6, y - 6);
     const fw = w + 12, fh = h + 12;
@@ -372,7 +482,6 @@
     ctx.fill(portraitPath(fw, fh));
     ctx.restore();
 
-    // Portrait window clipping & image
     ctx.save();
     ctx.translate(x, y);
     ctx.clip(portraitPath(w, h));
@@ -443,7 +552,6 @@
     ctx.save();
     ctx.translate(cx, cy);
     ctx.fillStyle = '#bd913e';
-    // Diamond top
     ctx.beginPath();
     ctx.moveTo(0, -10);
     ctx.lineTo(24, 0);
@@ -452,7 +560,6 @@
     ctx.closePath();
     ctx.fill();
 
-    // Cap base
     ctx.beginPath();
     ctx.moveTo(-13, 3);
     ctx.lineTo(13, 3);
@@ -461,7 +568,6 @@
     ctx.closePath();
     ctx.fill();
 
-    // Tassel
     ctx.strokeStyle = '#e5c365';
     ctx.lineWidth = 1.8;
     ctx.beginPath();
@@ -474,13 +580,11 @@
 
   function drawRibbonBanner(ctx, x, y, w, h, text) {
     ctx.save();
-    // Ribbon shadow
     ctx.shadowColor = 'rgba(0, 31, 19, 0.4)';
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 4;
     ctx.shadowBlur = 10;
 
-    // Center gradient
     const grad = ctx.createLinearGradient(x, y, x, y + h);
     grad.addColorStop(0, '#09593a');
     grad.addColorStop(0.5, '#063e28');
@@ -489,7 +593,6 @@
     ctx.fillRect(x, y, w, h);
     ctx.shadowColor = 'transparent';
 
-    // Gold borders
     ctx.strokeStyle = '#ecd382';
     ctx.lineWidth = 2.5;
     ctx.beginPath();
@@ -501,25 +604,23 @@
     ctx.moveTo(x, y + h); ctx.lineTo(x + w, y + h);
     ctx.stroke();
 
-    // Swallowtails
     const tailW = 28;
     ctx.fillStyle = '#042719';
-    // Left fold
     ctx.beginPath();
     ctx.moveTo(x, y + 4);
     ctx.lineTo(x - tailW, y + h / 2);
     ctx.lineTo(x, y + h - 4);
     ctx.closePath();
     ctx.fill();
-    // Right fold
+
     ctx.beginPath();
     ctx.moveTo(x + w, y + 4);
+    ctx.lineTo(x + w + tailW, y + h / 2);
     ctx.lineTo(x + w + tailW, y + h / 2);
     ctx.lineTo(x + w, y + h - 4);
     ctx.closePath();
     ctx.fill();
 
-    // Student Name Text
     const calFont = calFontForName(text, w - 40);
     ctx.font = calFont.font;
     ctx.fillStyle = '#fffdf4';
@@ -540,7 +641,6 @@
       const cx = startX + col * (cardW + gapX);
       const cy = startY + row * (cardH + gapY);
 
-      // Card box
       ctx.save();
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(cx, cy, cardW, cardH);
@@ -548,7 +648,6 @@
       ctx.lineWidth = 1;
       ctx.strokeRect(cx, cy, cardW, cardH);
 
-      // Month Header
       ctx.fillStyle = '#063e28';
       ctx.fillRect(cx, cy, cardW, 26);
       ctx.strokeStyle = '#bd913e';
@@ -563,7 +662,6 @@
       ctx.textBaseline = 'middle';
       ctx.fillText(MONTH_NAMES[m], cx + cardW / 2, cy + 13);
 
-      // Weekdays Row
       ctx.fillStyle = '#f3f6ee';
       ctx.fillRect(cx, cy + 27, cardW, 18);
       ctx.strokeStyle = '#e1e7db';
@@ -579,7 +677,6 @@
         ctx.fillText(WEEKDAY_NAMES[w], cx + w * colW + colW / 2, cy + 36);
       }
 
-      // Dates
       const firstDay = new Date(y, m, 1).getDay();
       const daysInMonth = new Date(y, m + 1, 0).getDate();
       ctx.font = '600 11.5px Arial, sans-serif';
@@ -607,11 +704,9 @@
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
-    // 1. Background
     ctx.fillStyle = '#fffdf5';
     ctx.fillRect(0, 0, CAL_WIDTH, CAL_HEIGHT);
 
-    // 2. Outer borders
     ctx.lineWidth = 14;
     ctx.strokeStyle = '#063e28';
     ctx.strokeRect(16, 16, CAL_WIDTH - 32, CAL_HEIGHT - 32);
@@ -624,13 +719,11 @@
     ctx.strokeStyle = '#d4af37';
     ctx.strokeRect(34, 34, CAL_WIDTH - 68, CAL_HEIGHT - 68);
 
-    // Corner brackets
     drawCornerBracket(ctx, 34, 34, 1, 1);
     drawCornerBracket(ctx, CAL_WIDTH - 34, 34, -1, 1);
     drawCornerBracket(ctx, 34, CAL_HEIGHT - 34, 1, -1);
     drawCornerBracket(ctx, CAL_WIDTH - 34, CAL_HEIGHT - 34, -1, -1);
 
-    // 3. Logos
     if (crecheLogoImg) {
       ctx.drawImage(crecheLogoImg, 55, 42, 128, 115);
     }
@@ -638,7 +731,6 @@
       ctx.drawImage(limpopoLogoImg, CAL_WIDTH - 245, 52, 195, 75);
     }
 
-    // 4. Header typography
     ctx.textAlign = 'center';
     ctx.textBaseline = 'alphabetic';
 
@@ -664,7 +756,6 @@
     ctx.fillStyle = '#bd913e';
     ctx.fillText('SMALL STEPS  •  BRIGHTER TOMORROWS', CAL_WIDTH / 2, 168);
 
-    // Divider rule
     ctx.lineWidth = 1;
     ctx.strokeStyle = '#bd913e';
     ctx.beginPath();
@@ -675,34 +766,19 @@
     ctx.font = '11px serif';
     ctx.fillText('✦', CAL_WIDTH / 2, 184);
 
-    // 5. Side quotes with laurels (exact crops from reference poster)
     if (leftQuoteImg) {
       ctx.drawImage(leftQuoteImg, 65, 235, 220, 280);
-    } else {
-      ctx.fillStyle = '#063e28';
-      ctx.font = 'bold 20px "Times New Roman", Times, serif';
-      const lines = ['A', 'BRIGHT', 'BEGINNING', 'FOR A', 'BRIGHTER', 'FUTURE'];
-      lines.forEach((l, i) => ctx.fillText(l, 175, 310 + i * 26));
     }
-
     if (rightQuoteImg) {
       ctx.drawImage(rightQuoteImg, CAL_WIDTH - 285, 235, 220, 280);
-    } else {
-      ctx.fillStyle = '#063e28';
-      ctx.font = 'bold 20px "Times New Roman", Times, serif';
-      const lines = ['TODAY', 'A LITTLE', 'LEARNER,', 'TOMORROW', 'A BIG', 'DREAMER'];
-      lines.forEach((l, i) => ctx.fillText(l, CAL_WIDTH - 175, 310 + i * 26));
     }
 
-    // 6. Framed Portrait
     drawCalendarPortrait(ctx, calPhotoBox.x, calPhotoBox.y, calPhotoBox.w, calPhotoBox.h);
 
-    // 7. Student Name Ribbon
     const ribW = 660, ribH = 52;
     const ribX = (CAL_WIDTH - ribW) / 2, ribY = 642;
     drawRibbonBanner(ctx, ribX, ribY, ribW, ribH, fields.name.value.trim() || 'Bonolo Makola');
 
-    // 8. Meta Row: DOB and Gender
     ctx.font = 'bold 18px "Times New Roman", Times, serif';
     ctx.fillStyle = '#002d1c';
     ctx.textAlign = 'center';
@@ -710,7 +786,6 @@
     const genText = `👤  Gender: ${fields.gender.value.trim() || 'Male'}`;
     ctx.fillText(`${dobText}     |     ${genText}`, CAL_WIDTH / 2, 720);
 
-    // 9. Section Divider
     ctx.lineWidth = 1.5;
     ctx.strokeStyle = '#bd913e';
     ctx.beginPath();
@@ -721,10 +796,8 @@
     ctx.font = 'bold 13px Georgia, serif';
     ctx.fillText(`✦   ${year} ACADEMIC YEAR   ✦`, CAL_WIDTH / 2, 750);
 
-    // 10. 12-Month Calendar Grid
     drawMonthsGrid(ctx, parseInt(year, 10), 65, 772, 340, 182, 25, 15);
 
-    // 11. Footer
     ctx.textAlign = 'center';
     ctx.font = 'italic 20px Georgia, serif';
     ctx.fillStyle = '#063e28';
@@ -762,14 +835,19 @@
     return `${name}-Dream-Big-Graduation.png`;
   }
 
-  // Event Listeners
-  tabGrad.addEventListener('click', () => setMode('graduation'));
-  tabCal.addEventListener('click', () => setMode('calendar'));
+  // Tab Listeners
+  for (const mode of Object.keys(tabs)) {
+    if (tabs[mode]) tabs[mode].addEventListener('click', () => setMode(mode));
+  }
 
   $('download').addEventListener('click', async () => {
+    if (currentMode === 'book') {
+      window.print();
+      return;
+    }
     if (!form.reportValidity()) return;
     $('download').disabled = true;
-    status('Preparing your high-resolution PNG…');
+    status('Preparing high-resolution PNG…');
     try {
       const canvas = currentMode === 'calendar' ? await renderCalendar(EXPORT_SCALE) : await renderPoster(EXPORT_SCALE);
       const blob = await pngBlob(canvas);
@@ -790,6 +868,10 @@
   });
 
   $('preview').addEventListener('click', async () => {
+    if (currentMode === 'book') {
+      showSpread(1);
+      return;
+    }
     if (!form.reportValidity()) return;
     try {
       const canvas = currentMode === 'calendar' ? await renderCalendar(1) : await renderPoster(1);
@@ -831,10 +913,12 @@
         portraitImage = originalPortrait;
         $('student-portrait').src = originalPortrait.src;
         $('cal-student-portrait').src = originalPortrait.src;
+        if ($('book-portrait-img')) $('book-portrait-img').src = originalPortrait.src;
       }
       resetPhotoPosition();
       updateText();
       updateCalendarGrid(defaults.year);
+      showSpread(0);
       status('Original student details and portrait restored.');
     });
   });
@@ -859,6 +943,7 @@
       portraitImage = loaded;
       $('student-portrait').src = loaded.src;
       $('cal-student-portrait').src = loaded.src;
+      if ($('book-portrait-img')) $('book-portrait-img').src = loaded.src;
       resetPhotoPosition();
       status('Portrait updated. Adjust its position if needed.');
     } catch (error) {
@@ -868,8 +953,9 @@
     }
   });
 
-  // Drag-and-drop to pan portrait on either window
+  // Drag portrait handlers
   function attachDrag(windowElement, getBox) {
+    if (!windowElement) return;
     windowElement.addEventListener('pointerdown', event => {
       if (!ready) return;
       dragStart = {
@@ -909,9 +995,117 @@
   new ResizeObserver(fitStage).observe(stage);
   window.addEventListener('resize', fitStage);
 
+  // Memoriq AI Integration ("Plus You")
+  function setupAIStudio() {
+    const btnGen = $('btn-generate-ai');
+    const outContainer = $('ai-output-container');
+    const outText = $('ai-output-text');
+    const typeSelect = $('ai-gen-type');
+    const langSelect = $('ai-gen-lang');
+    const promptInput = $('ai-custom-prompt');
+    const btnApply = $('btn-apply-to-book');
+    const btnCopy = $('btn-copy-ai');
+
+    const toggleKey = $('toggle-gemini-settings');
+    const keyBox = $('gemini-key-box');
+    const keyInput = $('gemini-api-key');
+    const btnSaveKey = $('save-gemini-key');
+
+    if (window.memoriqAI && keyInput) {
+      keyInput.value = window.memoriqAI.getApiKey();
+    }
+
+    if (toggleKey) {
+      toggleKey.addEventListener('click', () => {
+        keyBox.style.display = keyBox.style.display === 'none' ? 'block' : 'none';
+      });
+    }
+
+    if (btnSaveKey) {
+      btnSaveKey.addEventListener('click', () => {
+        window.memoriqAI.setApiKey(keyInput.value);
+        status(keyInput.value ? 'Gemini API key saved in browser.' : 'Gemini key cleared.');
+        keyBox.style.display = 'none';
+      });
+    }
+
+    // Quick Prompt Chips
+    document.querySelectorAll('.ai-chip-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (typeSelect) typeSelect.value = btn.dataset.type || 'graduation_wish';
+        if (langSelect) langSelect.value = btn.dataset.lang || 'en';
+        if (btnGen) btnGen.click();
+      });
+    });
+
+    if (btnGen) {
+      btnGen.addEventListener('click', async () => {
+        btnGen.disabled = true;
+        btnGen.textContent = '✨ Thinking & Generating…';
+        try {
+          const type = typeSelect ? typeSelect.value : 'graduation_wish';
+          const lang = langSelect ? langSelect.value : 'en';
+          const customPrompt = promptInput ? promptInput.value.trim() : '';
+
+          const generated = await window.memoriqAI.generate(type, {
+            name: fields.name.value.trim() || 'Bonolo Makola',
+            gender: fields.gender.value.trim() || 'Male',
+            dob: fields.dob.value || '2021-08-18',
+            dream: fields.dream.value.trim() || 'Doctor',
+            teacher: fields.teacher.value.trim() || 'Teacher Thandi',
+            lang,
+            customPrompt
+          });
+
+          outText.textContent = generated;
+          outContainer.style.display = 'block';
+          status('Generated text ready!');
+        } catch (err) {
+          status(`AI Error: ${err.message}`, true);
+        } finally {
+          btnGen.disabled = false;
+          btnGen.textContent = '✨ Generate with Memoriq AI';
+        }
+      });
+    }
+
+    if (btnApply) {
+      btnApply.addEventListener('click', () => {
+        const text = outText.textContent.trim();
+        if (text && fields.blessing) {
+          fields.blessing.value = text;
+          updateText();
+          setMode('book');
+          showSpread(2); // Jump to memories spread
+          status('Applied to Memory Book!');
+        }
+      });
+    }
+
+    if (btnCopy) {
+      btnCopy.addEventListener('click', async () => {
+        const text = outText.textContent.trim();
+        if (text) {
+          await navigator.clipboard.writeText(text);
+          btnCopy.textContent = '✓ Copied!';
+          setTimeout(() => { btnCopy.textContent = '📋 Copy Text'; }, 2000);
+        }
+      });
+    }
+  }
+
+  // Mount Scannable QR Code Plaque
+  function setupQRCode() {
+    const container = $('plaque-qr-container');
+    if (!container || !window.createMemoriqQRCode) return;
+    container.innerHTML = '';
+    const targetUrl = 'https://students-lemon-seven.vercel.app/';
+    const svg = window.createMemoriqQRCode(targetUrl, 160);
+    container.appendChild(svg);
+  }
+
   async function initialise() {
     try {
-      // 1. Load reference image data
       const refSrc = window.REFERENCE_IMAGE || 'assets/reference.png';
       sourceImage = await loadImage(refSrc);
 
@@ -919,13 +1113,11 @@
         throw new Error('Reference artwork dimensions do not match the template.');
       }
 
-      // 2. Prepare artwork and crops for graduation keepsake
       artworkImage = await loadImage(prepareArtwork());
       for (const key of Object.keys(textBoxes)) {
         defaultTextCrops[key] = await loadImage(cropReference(textBoxes[key]));
       }
 
-      // 3. Preload logos & quote decorations
       if (window.CRECHE_LOGO_DATA) {
         crecheLogoImg = await loadImage(window.CRECHE_LOGO_DATA);
       } else {
@@ -941,16 +1133,18 @@
       leftQuoteImg = await loadImage(cropReference({ x: 60, y: 475, w: 220, h: 290 })).catch(() => null);
       rightQuoteImg = await loadImage(cropReference({ x: 920, y: 475, w: 220, h: 290 })).catch(() => null);
 
-      // 4. Default portrait
       originalPortrait = await loadImage(cropReference(photoBox));
       portraitImage = originalPortrait;
 
       $('fixed-artwork').src = artworkImage.src;
       $('student-portrait').src = portraitImage.src;
       $('cal-student-portrait').src = portraitImage.src;
+      if ($('book-portrait-img')) $('book-portrait-img').src = portraitImage.src;
 
-      // 5. Initialize Calendar grid
       updateCalendarGrid(defaults.year);
+      showSpread(0);
+      setupQRCode();
+      setupAIStudio();
 
       ready = true;
       updateText();
@@ -961,14 +1155,17 @@
       gradCard.dataset.ready = 'true';
       calCard.dataset.ready = 'true';
 
-      // Check if started with #calendar in URL
       if (window.location.hash === '#calendar' || window.location.pathname.endsWith('calendar.html')) {
         setMode('calendar');
+      } else if (window.location.hash === '#book' || window.location.pathname.endsWith('memory-book.html')) {
+        setMode('book');
+      } else if (window.location.hash === '#ai') {
+        setMode('ai');
       } else {
         setMode('graduation');
       }
 
-      status('Ready. Your changes appear instantly.');
+      status('Ready. Your changes appear instantly across all formats.');
     } catch (error) {
       status(error.message, true);
     }
