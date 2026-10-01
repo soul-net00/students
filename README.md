@@ -1,13 +1,21 @@
-# Dream Big Crèche graduation keepsake
+# Dream Big Crèche Graduation Keepsake & Student Calendar
 
-The template matches the latest **1198 × 1313** reference, including the Dream Big Crèche logo at the upper left and the Limpopo Provincial Government logo at the upper right. The logo and footer slogan read **EDUCATION IS PRICELESS**. All fixed artwork is preserved directly from the supplied poster.
+An all-in-one web generator for **Dream Big Crèche**:
+1. **Graduation Keepsake**: Matches the original **1198 × 1313** reference poster with the Dream Big Crèche logo, Limpopo Provincial Government logo, ornate framed portrait, gold laurel quotes, and ribbon banner.
+2. **Student Calendar**: A companion **1200 × 1700** (A-series wall poster ratio) 12-month annual student calendar featuring the child's framed portrait, full details, and dynamically generated monthly date grids for any chosen academic year (2026, 2027, etc.).
 
-Open `index.html` in a current browser. No installation, server, internet connection, external fonts or libraries are required. Keep `index.html`, `style.css` and `script.js` in the same folder.
+### How to use
+- Open `index.html` (or `calendar.html`) in any modern browser. No installation, server, internet connection, build steps, or external libraries are required.
+- Use the **Keepsake** and **Calendar** tabs at the top of the editor to switch between templates at any time.
+- Changes to the student's name, birth date, gender, photo upload, and photo position/zoom are instantly synchronized across both templates.
+- **Student Calendar Year**: When on the Calendar tab, select the academic year (e.g., 2026, 2027) to update all 12 month grids and headings automatically.
+- **Photo adjustments**: Drag the portrait directly inside either preview window or use the horizontal, vertical, and zoom sliders.
+- **Preview**: Opens a clean modal preview of the active template.
+- **Download PNG**:
+  - **Graduation Keepsake**: Exports a high-resolution **3594 × 3939 px** PNG (`[Name]-Dream-Big-Graduation.png`).
+  - **Student Calendar**: Exports an ultra-sharp **3600 × 5100 px** 300 DPI print-quality PNG (`[Name]-Dream-Big-Calendar-[Year].png`).
+- **Reset**: Restores Bonolo Makola, 18-08-2021, Male, 2026, and the default portrait and position.
 
-Change the name, birth date, gender or photo. Use the photo position controls or drag the photo in the preview; zoom provides additional cropping room. **Reset** restores Bonolo Makola, 18-08-2021, Male and the portrait extracted from the latest supplied poster. **Preview** opens a clean poster preview. **Download PNG** saves a 3594 × 3939 image, excluding the controls, with a student-specific filename.
-
-The latest supplied poster is the visual source. The fixed design is preserved as embedded raster artwork, with separate editable HTML text and a CSS `object-fit: cover` portrait clipped to the reference frame. Both logos, headings, side quotes, leaves, gold lines, motto, ribbon and border cannot be edited through the interface. The initial sample text retains the exact original lettering as replaceable cropped layers; other names and details use a classic Times serif and shrink to fit their original spaces. The portrait was extracted from the supplied composite because no separate child photograph was supplied.
-
-PNG export uses the browser's native Canvas API, duplicating the same crop, positions and text metrics as the live HTML preview. It always uses the fixed poster ratio, regardless of screen size. The three-times export improves editable text and uploaded-photo rendering; the fixed raster decorations retain the detail available in the 1198 × 1313 source. A higher-resolution source would be needed to add further detail to those decorations.
-
-The original reference is also saved in `assets/reference.png` for comparison. It is not a runtime dependency; the image is embedded in `script.js` so exports also work when opening the template directly from disk.
+### Architecture
+- Works both locally (`file://`) and hosted (e.g. Vercel at `https://students-lemon-seven.vercel.app/`).
+- Native browser Canvas rendering ensures crisp vector-grade typography, accurate date grids, and reliable downloads without external server dependencies.

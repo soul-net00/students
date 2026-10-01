@@ -7,39 +7,107 @@ body { margin: 0; background: #eeeee7; color: var(--ink); font-family: Arial, He
 h1 { margin: 0; font: 26px Georgia, serif; }
 .header-note { margin-left: auto; color: #6b786e; font: italic 15px Georgia, serif; }
 .workspace { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 38px; max-width: 1450px; margin: 32px auto; padding: 0 36px; align-items: start; }
-.editor { background: #fafaf6; border: 1px solid #d9dfd5; border-radius: 9px; padding: 27px 24px 20px; }
-.editor h2 { font: 27px Georgia, serif; margin: 0 0 12px; }
-.intro { margin: 0 0 25px; color: #69766c; font-size: 13px; line-height: 1.7; }
-label { display: block; margin: 17px 0 8px; font-size: 12px; font-weight: 700; }
-input:not([type=file]):not([type=range]) { width: 100%; padding: 11px 12px; height: 43px; border: 1px solid #cbd5c9; border-radius: 5px; background: white; font: 14px Arial, sans-serif; color: var(--ink); }
-input:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.editor { background: #fafaf6; border: 1px solid #d9dfd5; border-radius: 9px; padding: 24px 22px 20px; }
+.editor h2 { font: 25px Georgia, serif; margin: 0 0 10px; }
+.intro { margin: 0 0 20px; color: #69766c; font-size: 13px; line-height: 1.6; }
+
+/* Template Selector Tabs */
+.template-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 22px;
+  background: #e7ece2;
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid #ced6c8;
+}
+.template-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #4a6652;
+  font: 700 12.5px Arial, sans-serif;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.template-tab:hover {
+  color: var(--green);
+  background: rgba(255, 255, 255, 0.6);
+}
+.template-tab.active {
+  background: #ffffff;
+  color: var(--green);
+  box-shadow: 0 2px 6px rgba(6, 62, 40, 0.12);
+}
+.template-tab .tab-icon {
+  font-size: 15px;
+}
+
+label { display: block; margin: 16px 0 7px; font-size: 12px; font-weight: 700; }
+input:not([type=file]):not([type=range]), select { width: 100%; padding: 11px 12px; height: 43px; border: 1px solid #cbd5c9; border-radius: 5px; background: white; font: 14px Arial, sans-serif; color: var(--ink); }
+select { cursor: pointer; }
+input:focus-visible, select:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 .upload-box { position: relative; display: flex; align-items: center; flex-direction: column; gap: 7px; padding: 18px 7px; background: #f0f3ed; border: 1px dashed #a7bba9; border-radius: 6px; font-size: 13px; }
 .upload-symbol { font-size: 26px; color: var(--green); }
 .upload-box small { color: #68796a; font-size: 10px; }
 .upload-box input { max-width: 235px; font-size: 11px; cursor: pointer; margin-top: 5px; }
 input::file-selector-button { background: #e3e9df; color: var(--green); padding: 6px 9px; border: 0; border-radius: 3px; cursor: pointer; }
-.photo-adjustments { margin: 19px 0 24px; font-size: 12px; }
-summary { cursor: pointer; color: #4e6656; }
+.photo-adjustments { margin: 18px 0 22px; font-size: 12px; }
+summary { cursor: pointer; color: #4e6656; font-weight: 600; }
 input[type=range] { width: 100%; accent-color: var(--green); }
 .photo-adjustments small { display: block; color: #69766c; line-height: 1.5; margin-top: 9px; }
-.button { min-height: 42px; padding: 11px 15px; border-radius: 5px; font: 700 12px Arial, sans-serif; cursor: pointer; transition: background .15s; }
+.button { min-height: 42px; padding: 11px 15px; border-radius: 5px; font: 700 12px Arial, sans-serif; cursor: pointer; transition: background .15s, opacity .15s; }
 .primary { width: 100%; background: var(--green); color: #fffdf5; border: 1px solid var(--green); }
 .primary:hover { background: #0c5137; }
 .secondary { border: 1px solid #c8d3c4; color: #46614d; background: transparent; }
 .secondary:hover { background: #e9eee5; }
 .button:disabled { opacity: .5; cursor: wait; }
 .secondary-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-.export-note { font-size: 10px; line-height: 1.8; color: #718075; margin-top: 18px; }
+.export-note { font-size: 10px; line-height: 1.7; color: #718075; margin-top: 16px; }
 .status { font-size: 11px; color: #526f5b; line-height: 1.6; margin-bottom: 0; min-height: 18px; }
 .status.error { color: #a63c2d; }
 .preview-panel { min-width: 0; }
 .preview-heading { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 17px; }
 .preview-heading h2 { margin: 0; font-size: 13px; font-weight: 600; }
 .preview-heading span { font-size: 10px; color: #768578; }
-.poster-stage { position: relative; width: 100%; max-width: 840px; margin: 0 auto; aspect-ratio: 1198 / 1313; box-shadow: 0 10px 38px #12332024; overflow: hidden; background: #fffdf5; }
-/* The poster never reflows. Only its enclosing stage scales. All coordinates
-   below are measured directly from the user's 1198 × 1313 reference. */
-.graduation-card { width: 1198px; height: 1313px; position: absolute; inset: 0 auto auto 0; transform: scale(var(--poster-scale, .6)); transform-origin: top left; overflow: hidden; background: #fffdf5; }
+
+/* Preview Stage */
+.poster-stage {
+  position: relative;
+  width: 100%;
+  max-width: 840px;
+  margin: 0 auto;
+  aspect-ratio: 1198 / 1313;
+  box-shadow: 0 10px 38px #12332024;
+  overflow: hidden;
+  background: #fffdf5;
+  transition: max-width 0.25s ease, aspect-ratio 0.25s ease;
+}
+.poster-stage.mode-calendar {
+  max-width: 720px;
+  aspect-ratio: 1200 / 1700;
+}
+
+/* Graduation Card */
+.graduation-card {
+  width: 1198px;
+  height: 1313px;
+  position: absolute;
+  inset: 0 auto auto 0;
+  transform: scale(var(--poster-scale, .6));
+  transform-origin: top left;
+  overflow: hidden;
+  background: #fffdf5;
+}
+.graduation-card[hidden], .calendar-card[hidden] {
+  display: none !important;
+}
 .fixed-artwork { display: block; position: absolute; inset: 0; width: 1198px; height: 1313px; user-select: none; }
 .clip-definitions { position: absolute; }
 .portrait-window { position: absolute; left: 319px; top: 394px; width: 557px; height: 635px; clip-path: url(#portrait-clip); overflow: hidden; cursor: grab; touch-action: none; }
@@ -49,12 +117,385 @@ input[type=range] { width: 100%; accent-color: var(--green); }
 .dob-label, .gender-label { position: absolute; height: 39px; display: flex; align-items: center; font: 26px/1 var(--serif); color: #002d1c; white-space: pre; }
 .dob-label { top: 1140px; left: 390px; width: 185px; }
 .gender-label { top: 1140px; left: 688px; width: 195px; }
+
+/* Calendar Card */
+.calendar-card {
+  width: 1200px;
+  height: 1700px;
+  position: absolute;
+  inset: 0 auto auto 0;
+  transform: scale(var(--calendar-scale, .42));
+  transform-origin: top left;
+  overflow: hidden;
+  background: #fffdf5;
+  box-sizing: border-box;
+}
+
+/* Calendar Ornate Borders */
+.cal-border-outer {
+  position: absolute;
+  inset: 16px;
+  border: 14px solid #063e28;
+  pointer-events: none;
+}
+.cal-border-gold {
+  position: absolute;
+  inset: 28px;
+  border: 2.5px solid #bd913e;
+  pointer-events: none;
+}
+.cal-border-inner {
+  position: absolute;
+  inset: 34px;
+  border: 1px solid #d4af37;
+  pointer-events: none;
+}
+.cal-corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-color: #bd913e;
+  border-style: solid;
+  pointer-events: none;
+}
+.cal-corner-tl { top: 34px; left: 34px; border-width: 3px 0 0 3px; }
+.cal-corner-tr { top: 34px; right: 34px; border-width: 3px 3px 0 0; }
+.cal-corner-bl { bottom: 34px; left: 34px; border-width: 0 0 3px 3px; }
+.cal-corner-br { bottom: 34px; right: 34px; border-width: 0 3px 3px 0; }
+
+/* Calendar Header */
+.cal-header {
+  position: absolute;
+  top: 42px;
+  left: 45px;
+  right: 45px;
+  height: 165px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cal-logo-left { width: 140px; text-align: left; }
+.cal-crest-img { max-width: 128px; max-height: 115px; object-fit: contain; }
+.cal-logo-right { width: 220px; text-align: right; }
+.cal-limpopo-img { max-width: 205px; max-height: 75px; object-fit: contain; }
+
+.cal-header-center {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.cal-eyebrow {
+  font: bold 30px Georgia, serif;
+  color: var(--green);
+  letter-spacing: 2px;
+  line-height: 1.1;
+}
+.cal-motto {
+  font: bold 11px Arial, sans-serif;
+  color: #567261;
+  letter-spacing: 3px;
+  margin-top: 3px;
+}
+.cal-cap-wrap {
+  margin: 3px 0 2px;
+  width: 42px;
+  height: 22px;
+}
+.cal-grad-cap {
+  width: 100%;
+  height: 100%;
+}
+.cal-title {
+  margin: 0;
+  font: bold 42px/1.1 var(--serif);
+  color: var(--green);
+  text-shadow: 1px 2px 3px rgba(189, 145, 62, 0.35);
+  letter-spacing: 1.5px;
+}
+.cal-slogan {
+  font: bold 13px var(--serif);
+  color: var(--gold);
+  letter-spacing: 3px;
+  margin-top: 4px;
+}
+.cal-gold-rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 320px;
+  margin-top: 6px;
+  color: var(--gold);
+  font-size: 11px;
+}
+.cal-gold-rule::before, .cal-gold-rule::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--gold);
+}
+
+/* Student Section */
+.cal-student-section {
+  position: absolute;
+  top: 215px;
+  left: 45px;
+  right: 45px;
+  height: 415px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cal-side-quote {
+  width: 330px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.cal-side-quote p {
+  margin: 0;
+  font: bold 21px/1.4 var(--serif);
+  color: var(--green);
+  letter-spacing: 1.5px;
+}
+.cal-laurel {
+  width: 40px;
+  height: 40px;
+  color: var(--gold);
+}
+
+/* Calendar Portrait Frame */
+.cal-portrait-frame {
+  position: relative;
+  width: 380px;
+  height: 415px;
+  padding: 8px;
+  background: linear-gradient(135deg, #d8b467 0%, #bd913e 50%, #906c27 100%);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  clip-path: url(#portrait-clip);
+}
+.cal-portrait-window {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  clip-path: url(#portrait-clip);
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  background: #fcfaf0;
+}
+.cal-portrait-window.dragging {
+  cursor: grabbing;
+}
+.cal-portrait-window img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--photo-x, 50%) var(--photo-y, 50%);
+  transform: scale(var(--photo-zoom, 1));
+  transform-origin: var(--photo-x, 50%) var(--photo-y, 50%);
+  user-select: none;
+}
+
+/* Identity Section */
+.cal-identity-section {
+  position: absolute;
+  top: 642px;
+  left: 45px;
+  right: 45px;
+  text-align: center;
+}
+.cal-ribbon {
+  position: relative;
+  width: 660px;
+  height: 52px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, #09593a 0%, #063e28 50%, #042719 100%);
+  border-top: 2.5px solid #ecd382;
+  border-bottom: 2.5px solid #946e27;
+  border-radius: 3px;
+  box-shadow: 0 6px 18px rgba(0, 31, 19, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cal-name-label {
+  color: #fffdf4;
+  font-family: var(--serif);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: 1px 2px 3px #001f13;
+  white-space: pre;
+  max-width: 620px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cal-meta-row {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  font: bold 18px var(--serif);
+  color: #002d1c;
+}
+.cal-meta-sep {
+  color: var(--gold);
+  font-size: 20px;
+}
+
+/* Calendar Section Divider */
+.cal-section-divider {
+  position: absolute;
+  top: 738px;
+  left: 65px;
+  right: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.cal-div-line {
+  flex: 1;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, #bd913e 50%, transparent);
+}
+.cal-div-badge {
+  padding: 4px 18px;
+  background: #f4f7ee;
+  border: 1px solid #c9d8c4;
+  border-radius: 20px;
+  color: var(--green);
+  font: bold 13px Georgia, serif;
+  letter-spacing: 2px;
+}
+
+/* 12-Month Calendar Grid */
+.cal-months-grid {
+  position: absolute;
+  top: 772px;
+  left: 65px;
+  right: 65px;
+  display: grid;
+  grid-template-columns: repeat(3, 340px);
+  grid-template-rows: repeat(4, 182px);
+  gap: 15px 25px;
+}
+.cal-month-card {
+  background: #ffffff;
+  border: 1px solid #d5decb;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(6, 62, 40, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+.cal-month-header {
+  background: var(--green);
+  color: #fffdf5;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: 2px;
+  text-align: center;
+  padding: 5px 0;
+  border-bottom: 2px solid var(--gold);
+}
+.cal-weekdays-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: #f3f6ee;
+  border-bottom: 1px solid #e1e7db;
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+  padding: 3px 0;
+  color: #063e28;
+}
+.cal-weekdays-row .sun {
+  color: #b33927;
+}
+.cal-dates-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  align-items: center;
+  padding: 4px 2px;
+  color: #1b3024;
+}
+.cal-date-cell.sun {
+  color: #b33927;
+}
+.cal-date-cell.empty {
+  visibility: hidden;
+}
+
+/* Footer */
+.cal-footer {
+  position: absolute;
+  bottom: 25px;
+  left: 65px;
+  right: 65px;
+  text-align: center;
+}
+.cal-footer-congrats {
+  font: italic 20px Georgia, serif;
+  color: var(--green);
+}
+.cal-footer-rule {
+  width: 440px;
+  height: 1px;
+  background: var(--gold);
+  margin: 6px auto;
+}
+.cal-footer-slogan {
+  font: bold 14px "Times New Roman", Times, serif;
+  color: var(--gold);
+  letter-spacing: 5px;
+}
+.cal-footer-sub {
+  font: bold 9px Arial, sans-serif;
+  color: #6b786e;
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 dialog { padding: 20px; width: min(920px, 94vw); max-height: 94vh; border: 1px solid #bcceb8; border-radius: 8px; background: #f7f8f1; }
 dialog::backdrop { background: #072016bd; }
 .dialog-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 16px; }
 .dialog-toolbar h2 { font: 20px Georgia, serif; margin: 0; }
 #full-preview { display: block; width: 100%; height: auto; }
-@media (max-width: 900px) { .workspace { grid-template-columns: 270px minmax(0,1fr); gap: 22px; padding: 0 22px; } .editor { padding: 24px 18px; } .header-note { display: none; } }
-@media (max-width: 680px) { .app-header { padding: 18px 20px; } .workspace { grid-template-columns: 1fr; margin-top: 22px; padding: 0 18px; gap: 25px; } .preview-panel { grid-row: 1; } .editor { padding: 24px; } .preview-heading span { font-size: 9px; } }
-@media print { body { background: white; } .app-header, .editor, .preview-heading, dialog { display: none; } .workspace { display: block; padding: 0; margin: 0; } .poster-stage { box-shadow: none; max-width: none; } @page { size: 1198px 1313px; margin: 0; } }
+
+@media (max-width: 900px) {
+  .workspace { grid-template-columns: 270px minmax(0,1fr); gap: 22px; padding: 0 22px; }
+  .editor { padding: 24px 18px; }
+  .header-note { display: none; }
+}
+@media (max-width: 680px) {
+  .app-header { padding: 18px 20px; }
+  .workspace { grid-template-columns: 1fr; margin-top: 22px; padding: 0 18px; gap: 25px; }
+  .preview-panel { grid-row: 1; }
+  .editor { padding: 24px; }
+  .preview-heading span { font-size: 9px; }
+}
+@media print {
+  body { background: white; }
+  .app-header, .editor, .preview-heading, dialog { display: none; }
+  .workspace { display: block; padding: 0; margin: 0; }
+  .poster-stage { box-shadow: none; max-width: none; }
+  .poster-stage:not(.mode-calendar) .calendar-card { display: none !important; }
+  .poster-stage.mode-calendar .graduation-card { display: none !important; }
+  @page { margin: 0; }
+}

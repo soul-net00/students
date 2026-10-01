@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#063e28">
-  <title>Dream Big Crèche · Graduation Keepsake & Calendar</title>
+  <title>Dream Big Crèche · Student Calendar & Keepsake</title>
   <link rel="stylesheet" href="style.css">
   <script src="reference-data.js"></script>
   <script src="script.js" defer></script>
@@ -14,7 +14,7 @@
     <span class="brand-mark" aria-hidden="true">DB</span>
     <div>
       <p class="eyebrow">DREAM BIG CRÈCHE</p>
-      <h1>Graduation keepsake & Calendar</h1>
+      <h1>Student Calendar & Keepsake</h1>
     </div>
     <span class="header-note">One special moment. A lifelong memory.</span>
   </header>
@@ -22,21 +22,21 @@
     <aside class="editor" aria-labelledby="editor-title">
       <!-- Template Selector Tabs -->
       <div class="template-selector" role="tablist" aria-label="Template selection">
-        <button type="button" id="tab-graduation" class="template-tab active" role="tab" aria-selected="true">
+        <button type="button" id="tab-graduation" class="template-tab" role="tab" aria-selected="false">
           <span class="tab-icon">🎓</span> Keepsake
         </button>
-        <button type="button" id="tab-calendar" class="template-tab" role="tab" aria-selected="false">
+        <button type="button" id="tab-calendar" class="template-tab active" role="tab" aria-selected="true">
           <span class="tab-icon">📅</span> Calendar
         </button>
       </div>
 
-      <p class="eyebrow">PERSONALISE YOUR KEEPSAKE</p>
+      <p class="eyebrow">PERSONALISE YOUR CALENDAR</p>
       <h2 id="editor-title">Student details</h2>
       <p class="intro">Change the student's details below. The original design stays fixed.</p>
 
       <form id="student-form">
-        <!-- Calendar Year Selector (visible when calendar tab is active) -->
-        <div id="calendar-year-group" style="display: none;">
+        <!-- Calendar Year Selector -->
+        <div id="calendar-year-group">
           <label for="calendar-year">Calendar year</label>
           <select id="calendar-year" name="calendar-year">
             <option value="2026" selected>2026 (Current Academic Year)</option>
@@ -74,26 +74,26 @@
           <small>Drag the portrait in the preview to reposition it.</small>
         </details>
 
-        <button id="download" class="button primary" type="button" disabled>Download Keepsake PNG</button>
+        <button id="download" class="button primary" type="button" disabled>Download Calendar PNG</button>
         <div class="secondary-actions">
           <button id="preview" class="button secondary" type="button" disabled>Preview</button>
           <button id="reset" class="button secondary" type="reset">Reset</button>
         </div>
       </form>
 
-      <p class="export-note" id="export-note-text">High-resolution PNG · 3594 × 3939 px<br>Only the keepsake is included in your download.</p>
-      <p id="status" class="status" role="status" aria-live="polite">Preparing your keepsake…</p>
+      <p class="export-note" id="export-note-text">High-resolution PNG · 3600 × 5100 px (300 DPI Print Quality)<br>Only the calendar is included in your download.</p>
+      <p id="status" class="status" role="status" aria-live="polite">Preparing your calendar…</p>
     </aside>
 
     <section class="preview-panel" aria-labelledby="preview-title">
       <div class="preview-heading">
-        <h2 id="preview-title">Live preview · Graduation Keepsake</h2>
-        <span id="preview-sub">Original portrait proportions (1198 × 1313)</span>
+        <h2 id="preview-title">Live preview · Student Calendar</h2>
+        <span id="preview-sub">1200 × 1700 (A-series Wall Poster)</span>
       </div>
 
-      <div id="poster-stage" class="poster-stage">
+      <div id="poster-stage" class="poster-stage mode-calendar">
         <!-- 1. Graduation Card -->
-        <article id="graduation-card" class="graduation-card" aria-label="Dream Big Crèche graduation keepsake for Bonolo Makola">
+        <article id="graduation-card" class="graduation-card" aria-label="Dream Big Crèche graduation keepsake for Bonolo Makola" hidden>
           <img id="fixed-artwork" class="fixed-artwork" alt="Dream Big Crèche graduation design" draggable="false">
           <svg class="clip-definitions" width="0" height="0" aria-hidden="true">
             <defs>
@@ -108,11 +108,10 @@
           <div id="name-label" class="name-label">Bonolo Makola</div>
           <div id="dob-label" class="dob-label">DOB: 18-08-2021</div>
           <div id="gender-label" class="gender-label">Gender: Male</div>
-          <div class="sr-only">Dream Big Crèche. Limpopo Provincial Government, Republic of South Africa. Grow · Learn · Belong · Succeed. Graduation Ceremony. Small Steps · Brighter Tomorrows. A bright beginning for a brighter future. Today a little learner, tomorrow a big dreamer. Congratulations on Your Achievement. Education is Priceless.</div>
         </article>
 
         <!-- 2. Student Calendar Card -->
-        <article id="calendar-card" class="calendar-card" aria-label="Dream Big Crèche 2026 Student Calendar for Bonolo Makola" hidden>
+        <article id="calendar-card" class="calendar-card" aria-label="Dream Big Crèche 2026 Student Calendar for Bonolo Makola">
           <div class="cal-border-outer"></div>
           <div class="cal-border-gold"></div>
           <div class="cal-border-inner"></div>
@@ -179,7 +178,7 @@
           </div>
 
           <div id="cal-months-grid" class="cal-months-grid">
-            <!-- 12 Month Cards dynamically populated by JavaScript -->
+            <!-- Populated dynamically by script.js -->
           </div>
 
           <footer class="cal-footer">
@@ -194,10 +193,10 @@
   </main>
   <dialog id="preview-dialog" aria-labelledby="dialog-title">
     <div class="dialog-toolbar">
-      <h2 id="dialog-title">Your graduation keepsake</h2>
+      <h2 id="dialog-title">Your student calendar preview</h2>
       <button id="close-preview" class="button secondary" type="button">Close</button>
     </div>
-    <img id="full-preview" alt="Full keepsake preview">
+    <img id="full-preview" alt="Full calendar preview">
   </dialog>
 </body>
 </html>
